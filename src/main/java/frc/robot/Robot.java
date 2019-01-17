@@ -14,8 +14,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
-
 import frc.robot.subsystems.CameraSubsystem;
+
+import frc.robot.commands.autonomous.*;
 
 public class Robot extends TimedRobot {
   public static OI m_oi;
@@ -53,7 +54,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    m_autonomousCommand = new ApproachWall();
+    //m_autonomousCommand = m_chooser.getSelected();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -70,6 +72,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    
+
     Scheduler.getInstance().run();
   }
 
