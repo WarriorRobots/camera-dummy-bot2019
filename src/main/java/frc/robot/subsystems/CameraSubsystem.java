@@ -119,12 +119,12 @@ public class CameraSubsystem extends Subsystem {
 	}
 
 	/**
-	 * Compares the height of the seen target to the known size of the target at __ inches and determines
-	 * determines the distance away from the target.
+	 * Uses the conversion from pixels to radians and uses radians to figures out the trigonometry
+	 * between the height of the target and the range.
 	 * (Target may not be visible at very close range, use a sonar.)
 	 * @return Distance from target in inches.
 	 */
-	public double getObjectDistance() {
+	public double getTargetDistance() {
 
 		if (!canSeeObject()) return -1;
 
@@ -157,7 +157,7 @@ public class CameraSubsystem extends Subsystem {
 		builder.addDoubleProperty("object-skew", () -> getObjectRotationAngle(), null);
 		
 		//temp
-		builder.addDoubleProperty("object-distance", () -> getObjectDistance(), null);
+		builder.addDoubleProperty("object-distance", () -> getTargetDistance(), null);
 	}
 
 	@Override

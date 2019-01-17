@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.Constants;
 import frc.robot.commands.drive.TeleopTankDrive;
-import frc.robot.commands.autonomous.ApproachWall;
 import frc.robot.util.enums.RobotSide;
 
 /**

@@ -27,7 +27,7 @@ public class ApproachWall extends Command {
 	
     @Override
 	protected boolean isFinished() {
-		return (Robot.camera.getObjectDistance() < 25);
+		return (Robot.camera.getTargetDistance() < 25);
 	}
 
 }
