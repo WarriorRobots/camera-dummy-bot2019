@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.autonomous.ApproachWall;
+
 /**
  * Contains all constants that are used in the program, grouped into subclasses.
  */
@@ -14,7 +16,29 @@ public final class Constants {
 
 	/** Contains PID constants used for autonomous closed-loop control. */
 	public static final class AutoDrive {
-		// TODO constants from ApproachWall.java into Constants.java
+
+		/** kP value for {@link ApproachWall#PIDapproach} */
+		public static final double KP_APPROACH = 0.03;
+		/** */
+		public static final double KI_APPROACH = 0;
+		/** */
+		public static final double KD_APPROACH = 0;
+		/** SetPoint value for {@link ApproachWall#PIDapproach} */
+		public static final double SETPOINT_APPROACH = 50;
+		/** Tolerance value for {@link ApproachWall#PIDapproach} */
+		public static final double TOLERANCE_APPROACH = 2;
+
+
+		/** kP value for {@link ApproachWall#PIDcenter} */
+		public static final double KP_CENTER = 0.03;
+		/** */
+		public static final double KI_CENTER = 0;
+		/** */
+		public static final double KD_CENTER = 0;
+		/** SetPoint value for {@link ApproachWall#PIDcenter} */
+		public static final double SETPOINT_CENTER = 50;
+		//public static final double TOLERANCE_CENTER = ??;
+
 	}
 
 

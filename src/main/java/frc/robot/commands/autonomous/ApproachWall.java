@@ -1,6 +1,7 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.util.SynchronousPIDF;
 import edu.wpi.first.wpilibj.Timer;
@@ -24,8 +25,16 @@ public class ApproachWall extends Command {
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
 
-		PIDapproach = new SynchronousPIDF(0.03, 0, 0);
-		PIDcenter = new SynchronousPIDF(0.03, 0, 0);
+		PIDapproach = new SynchronousPIDF(
+			Constants.AutoDrive.KP_APPROACH,
+			Constants.AutoDrive.KI_APPROACH,
+			Constants.AutoDrive.KD_APPROACH
+		);
+		PIDcenter = new SynchronousPIDF(
+			Constants.AutoDrive.KP_CENTER,
+			Constants.AutoDrive.KI_CENTER,
+			Constants.AutoDrive.KD_CENTER
+		);
 
 		timer = new Timer();
 	}
@@ -33,11 +42,11 @@ public class ApproachWall extends Command {
 	@Override
 	protected void initialize() {
 		//PID.setIzone(minimumI, maximumI);
-		PIDapproach.setOutputRange(-1, 1);
-		PIDapproach.setSetpoint(50); // Robot should aim to be be 50 in away from the target
+		//PIDapproach.setOutputRange(-1, 1);
+		PIDapproach.setSetpoint(Constants.AutoDrive.SETPOINT_APPROACH); // Robot should aim to be be 50 in away from the target
 
-		PIDcenter.setOutputRange(-1, 1);
-		PIDcenter.setSetpoint(0); // Robot should aim to keep the target centered on the crosshair
+		//PIDcenter.setOutputRange(-1, 1);
+		PIDcenter.setSetpoint(Constants.AutoDrive.SETPOINT_CENTER); // Robot should aim to keep the target centered on the crosshair
 
 		timer.start();
 		
@@ -58,30 +67,21 @@ public class ApproachWall extends Command {
 		}
 
 		Robot.drivetrain.arcadeDriveRaw(valueapproach, -valuecenter);
-
-		/*
-		if (Robot.camera.canSeeObject() && Robot.camera.getTargetDistance() > 50)
-			Robot.drivetrain.arcadeDriveRaw(-0.6, 0);
-		else 
-			Robot.drivetrain.arcadeDriveRaw(0, 0);
-			// remember to STOP the robot when it should be done going forwards
-		*/
 	}
 	
     @Override
 	protected boolean isFinished() {
-		//return (Robot.camera.getTargetDistance() < 50);
-
-		return false; // temp till pid is tuned
-		
-		//return PID.onTarget(2); // Tolerance of 2 inches
-		// (to make room for plenty of error first time)
+		return (Robot.camera.getTargetDistance() < Constants.AutoDrive.SETPOINT_APPROACH &&
+			PIDapproach.onTarget(Constants.AutoDrive.TOLERANCE_APPROACH));
 	}
 	
 	@Override
 	protected void end() {
 		timer.stop();
 		PIDapproach.reset();
+		PIDcenter.reset();
+		valueapproach=0;
+		valuecenter=0;
 		Robot.drivetrain.stopDrive();
 	}
 
