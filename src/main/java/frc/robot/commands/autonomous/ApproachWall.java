@@ -6,20 +6,26 @@ import frc.robot.util.SynchronousPIDF;
 import edu.wpi.first.wpilibj.Timer;
 
 
-/** Approach the wall at a constant speed and then stop when within under 2 feet (give 1 inch). */
+/** Approach the wall keeping the target centered using 2 different PIDs. */
 public class ApproachWall extends Command {
 
 	/** PID used for approaching the wall. */
-	private SynchronousPIDF PID;
+	private SynchronousPIDF PIDapproach;
+	/** PID for keeping the target centered */
+	private SynchronousPIDF PIDcenter;
+
 	private Timer timer;
-	/** Calculated PID output should stored in value. */
-	private double value;
+	/** Calculated PID output from {@link #PIDapproach} should stored in value. */
+	private double valueapproach;
+	/** Calculated PID output from {@link #PIDcenter} should stored in value. */
+	private double valuecenter;
 
     public ApproachWall() {
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
 
-		PID = new SynchronousPIDF(0.025, 0, 0);
+		PIDapproach = new SynchronousPIDF(0.03, 0, 0);
+		PIDcenter = new SynchronousPIDF(0.03, 0, 0);
 
 		timer = new Timer();
 	}
@@ -27,8 +33,12 @@ public class ApproachWall extends Command {
 	@Override
 	protected void initialize() {
 		//PID.setIzone(minimumI, maximumI);
-		PID.setOutputRange(-1, 1);
-		PID.setSetpoint(50); // Robot should aim to be be 50 in away from the target
+		PIDapproach.setOutputRange(-1, 1);
+		PIDapproach.setSetpoint(50); // Robot should aim to be be 50 in away from the target
+
+		PIDcenter.setOutputRange(-1, 1);
+		PIDcenter.setSetpoint(0); // Robot should aim to keep the target centered on the crosshair
+
 		timer.start();
 		
 	}
@@ -36,14 +46,18 @@ public class ApproachWall extends Command {
 	@Override
 	protected void execute() {
 		if (Robot.camera.canSeeObject()) {
-			value = PID.calculate(Robot.camera.getTargetDistance(),timer.get());
+			valueapproach = PIDapproach.calculate(Robot.camera.getTargetDistance(),timer.get());
+			valuecenter = PIDcenter.calculate(Robot.camera.getObjectX(), timer.get());
 			//System.out.println(value);
 			//System.out.println(Robot.camera.getTargetDistance());
 		} else {
-			value = 0; // Set value to zero if the target can not be seen so robot does not go crazy
+			// Set value to zero if the target can not be seen so robot does not go crazy
+			valueapproach = 0; 
+			
+			// Don't 0 valuecenter because it should "remember" what direction it's attempting to turn.
 		}
 
-		Robot.drivetrain.arcadeDriveRaw(value, 0);
+		Robot.drivetrain.arcadeDriveRaw(valueapproach, -valuecenter);
 
 		/*
 		if (Robot.camera.canSeeObject() && Robot.camera.getTargetDistance() > 50)
@@ -60,14 +74,14 @@ public class ApproachWall extends Command {
 
 		return false; // temp till pid is tuned
 		
-		//return PID.onTarget(2); // Tolerance of 10 inches
+		//return PID.onTarget(2); // Tolerance of 2 inches
 		// (to make room for plenty of error first time)
 	}
 	
 	@Override
 	protected void end() {
 		timer.stop();
-		PID.reset();
+		PIDapproach.reset();
 		Robot.drivetrain.stopDrive();
 	}
 

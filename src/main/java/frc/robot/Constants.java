@@ -12,7 +12,12 @@ package frc.robot;
  */
 public final class Constants {
 
-	
+	/** Contains PID constants used for autonomous closed-loop control. */
+	public static final class AutoDrive {
+		// TODO constants from ApproachWall.java into Constants.java
+	}
+
+
 	/**
 	 * Contains values and methods related to the camera.
 	 * Conversions of degrees and radians unincluded.
