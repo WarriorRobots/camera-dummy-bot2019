@@ -30,13 +30,13 @@ public final class Constants {
 
 
 		/** kP value for {@link ApproachWall#PIDcenter} */
-		public static final double KP_CENTER = 0.03;
+		public static final double KP_CENTER = 0.045;
 		/** */
 		public static final double KI_CENTER = 0;
 		/** */
 		public static final double KD_CENTER = 0;
 		/** SetPoint value for {@link ApproachWall#PIDcenter} */
-		public static final double SETPOINT_CENTER = 50;
+		public static final double SETPOINT_CENTER = 0;
 		//public static final double TOLERANCE_CENTER = ??;
 
 	}

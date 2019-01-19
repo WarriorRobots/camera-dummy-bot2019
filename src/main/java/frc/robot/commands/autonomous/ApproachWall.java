@@ -25,6 +25,9 @@ public class ApproachWall extends Command {
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
 
+		valueapproach = 0;
+		valuecenter = 0;
+
 		PIDapproach = new SynchronousPIDF(
 			Constants.AutoDrive.KP_APPROACH,
 			Constants.AutoDrive.KI_APPROACH,
@@ -71,8 +74,11 @@ public class ApproachWall extends Command {
 	
     @Override
 	protected boolean isFinished() {
+		return false;
+		/*
 		return (Robot.camera.getTargetDistance() < Constants.AutoDrive.SETPOINT_APPROACH &&
 			PIDapproach.onTarget(Constants.AutoDrive.TOLERANCE_APPROACH));
+		*/
 	}
 	
 	@Override

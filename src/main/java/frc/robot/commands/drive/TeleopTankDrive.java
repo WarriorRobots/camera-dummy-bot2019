@@ -23,12 +23,12 @@ public class TeleopTankDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // Robot.drivetrain.tankDriveSquared(Robot.controlHandler.getLeftY(), Robot.controlHandler.getRightY());
-    /*Robot.drivetrain.arcadeDriveSquared(
+    //Robot.drivetrain.tankDriveSquared(Robot.controlHandler.getLeftY(1), Robot.controlHandler.getRightY(1));
+    Robot.drivetrain.arcadeDriveSquared(
       -Robot.controlHandler.getXboxLeftY(1),
-      Robot.controlHandler.getXboxLeftX(0.75)
+      Robot.controlHandler.getXboxRightX(0.75)
     );
-    */
+    Robot.drivetrain.tankDriveSquared(-Robot.controlHandler.getXboxLeftY(), -Robot.controlHandler.getXboxRightY());
   }
 
   // Make this return true when this Command no longer needs to run execute()

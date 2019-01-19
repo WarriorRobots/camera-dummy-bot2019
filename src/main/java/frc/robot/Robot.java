@@ -19,7 +19,7 @@ import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.autonomous.*;
 
 public class Robot extends TimedRobot {
-  public static OI m_oi;
+  //public static OI m_oi;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -27,11 +27,12 @@ public class Robot extends TimedRobot {
   public static final CameraSubsystem camera = new CameraSubsystem();
   public static final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
 
-
+  public static ControlHandler controlHandler;
 
   @Override
   public void robotInit() {
-    m_oi = new OI();
+    controlHandler = new ControlHandler();
+    //m_oi = new OI();
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);
 
@@ -54,7 +55,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    // Using Teleop
     m_autonomousCommand = new ApproachWall();
+
+
     //m_autonomousCommand = m_chooser.getSelected();
 
     /*
