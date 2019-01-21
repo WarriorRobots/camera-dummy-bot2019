@@ -25,7 +25,7 @@ public class CameraSubsystem extends Subsystem {
     /** Skew or rotation (-90 degrees to 0 degrees) */
 	private static final String TARGET_SKEW = "ts";
 	/** Horizontal sidelength of the rough bounding box (0 - 320 pixels) */
-	private static final String TARGET_WIDTH = "thoriz";
+	private static final String TARGET_WIDTH = "thor";
 	/** Vertical sidelength of the rough bounding box (0 - 320 pixels) */
 	private static final String TARGET_HEIGHT = "tvert";
     
@@ -120,6 +120,7 @@ public class CameraSubsystem extends Subsystem {
 		*/
 		double width = visionTable.getEntry(TARGET_WIDTH).getDouble(0);
 		double height = visionTable.getEntry(TARGET_HEIGHT).getDouble(0);
+		//System.out.printf("Width: %f\t\tHeight: %f\n",width,height); // TEMP
 		return (canSeeObject()==true)
 			//   visible	: not visible
 			? width/height 	: -1;
@@ -179,7 +180,7 @@ public class CameraSubsystem extends Subsystem {
         builder.addDoubleProperty("object-area", () -> getObjectArea(), null);
 		builder.addDoubleProperty("object-skew", () -> getObjectRotationAngle(), null);
 		
-		//temp
+		builder.addDoubleProperty("object-ratio", () -> getObjectAspectRatio(), null);
 		builder.addDoubleProperty("object-distance", () -> getTargetDistance(), null);
 	}
 
