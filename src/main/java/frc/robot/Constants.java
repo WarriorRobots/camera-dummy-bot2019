@@ -18,7 +18,7 @@ public final class Constants {
 	public static final class AutoDrive {
 
 		/** kP value for {@link ApproachWall#PIDapproach} */
-		public static final double KP_APPROACH = 0.025;
+		public static final double KP_APPROACH = 0.020;
 		/** */
 		public static final double KI_APPROACH = 0;
 		/** */

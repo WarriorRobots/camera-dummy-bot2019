@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.util.triggers.DpadTrigger;
 import frc.robot.util.triggers.ThresholdTrigger;
-
+import frc.robot.commands.autonomous.ApproachCurve;
 //import frc.robot.commands.SolenoidIn;
 //import frc.robot.commands.SolenoidOut;
 import frc.robot.commands.autonomous.ApproachWall;
@@ -77,6 +77,9 @@ public final class ControlHandler {
 		leftXboxBumper.whenPressed(new ChangePipeline(CameraSubsystem.PIPELINE_LEFT));
 		rightXboxBumper.whenPressed(new ChangePipeline(CameraSubsystem.PIPELINE_RIGHT));
 
+		//xboxX.whileHeld(new ApproachCurve());
+		xboxLeft.whileHeld(new ApproachCurve(CameraSubsystem.PIPELINE_LEFT));
+		xboxRight.whileHeld(new ApproachCurve(CameraSubsystem.PIPELINE_RIGHT));
         xboxA.whileHeld(new ApproachWall());
 		//rightXboxBumper.whenPressed(new SolenoidOut(4));
 		//rightXboxTrigger.whenPressed(new SolenoidIn(4));
