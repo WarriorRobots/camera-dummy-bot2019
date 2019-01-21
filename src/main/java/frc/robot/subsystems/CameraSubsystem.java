@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.Constants;
@@ -29,8 +30,14 @@ public class CameraSubsystem extends Subsystem {
 	private static final String TARGET_HEIGHT = "tvert";
     
     /** Vision table for Limelight */
-    private NetworkTable visionTable;
-
+	private NetworkTable visionTable;
+	
+	/** Pipeline id for the crosshair in the center. */
+	public static final int PIPELINE_CENTER = 0;
+	/** Pipeline id for the crosshair on the left. */
+	public static final int PIPELINE_LEFT = 1;
+	/** Pipeline id for the crosshair on the right. */
+	public static final int PIPELINE_RIGHT = 2;
 
 
     public CameraSubsystem() {
@@ -138,6 +145,22 @@ public class CameraSubsystem extends Subsystem {
 		double range = Constants.Camera.TARGET_HEIGHT / Math.tan(angle);
 
 		return range;
+	}
+
+	/** Changes the pipeline the Limelight is using to a new specified pipeline.
+	 * @param pipeline The pipeline the Limelight to change to (0 to 9).
+	 */
+	public void setPipeline(int pipeline) {
+		
+		// if pipeline is NOT between 0 and 9, warn the dashboard and quit the command.
+		if(!(0<=pipeline && pipeline<=9)) {
+			DriverStation.getInstance().reportWarning(
+				Integer.toString(pipeline)+" is not a valid pipeline to change to.", true);
+			// leave function to prevent a real error from the limelight
+			return;
+		}
+		visionTable.getEntry("pipeline").setDouble(pipeline);
+
 	}
 
 

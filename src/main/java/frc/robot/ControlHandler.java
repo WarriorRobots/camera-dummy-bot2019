@@ -17,6 +17,8 @@ import frc.robot.util.triggers.ThresholdTrigger;
 //import frc.robot.commands.SolenoidIn;
 //import frc.robot.commands.SolenoidOut;
 import frc.robot.commands.autonomous.ApproachWall;
+import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.commands.ChangePipeline;
 
 /**
  * Contains methods for receiving data from Joysticks and the Xbox controller.
@@ -70,11 +72,18 @@ public final class ControlHandler {
 		xboxSTART = new JoystickButton(xbox, 8);
 		xboxBACK = new JoystickButton(xbox, 7);
 
+
+		xboxB.whenPressed(new ChangePipeline(CameraSubsystem.PIPELINE_CENTER));
+		leftXboxBumper.whenPressed(new ChangePipeline(CameraSubsystem.PIPELINE_LEFT));
+		rightXboxBumper.whenPressed(new ChangePipeline(CameraSubsystem.PIPELINE_RIGHT));
+
         xboxA.whileHeld(new ApproachWall());
 		//rightXboxBumper.whenPressed(new SolenoidOut(4));
 		//rightXboxTrigger.whenPressed(new SolenoidIn(4));
 	}
 
+	//TODO figure out why the Joystick code does not work
+	// Joystick code it commented out because it crashes the robot (due to a null pointer exception)
 	/**
 	 * Gets Y-value of left joystick multiplied by scalingFactor.
 	 * @param scalingFactor  Decimal value that proportionally alters joystick output.
