@@ -126,6 +126,20 @@ public class CameraSubsystem extends Subsystem {
 			? width/height 	: -1;
 	}
 
+	/** <put comment here>
+	 * (This ratio can be used to see if the robot is lined up facing the target)
+	 * @return Aspect ratio of Width of target in pixels to Range in inches.
+	 */
+	public double getObjectWidthRange() {
+
+		double width = visionTable.getEntry(TARGET_WIDTH).getDouble(0);
+		double range = getTargetDistance();
+
+		return (canSeeObject())
+			? width/range	: -1;
+	}
+
+
 	/**
 	 * Uses the conversion from pixels to radians and uses radians to figures out the trigonometry
 	 * between the height of the target and the range.
@@ -182,6 +196,7 @@ public class CameraSubsystem extends Subsystem {
 		
 		builder.addDoubleProperty("object-ratio", () -> getObjectAspectRatio(), null);
 		builder.addDoubleProperty("object-distance", () -> getTargetDistance(), null);
+		builder.addDoubleProperty("object-widthrange", () -> getObjectWidthRange(), null);
 	}
 
 	@Override
