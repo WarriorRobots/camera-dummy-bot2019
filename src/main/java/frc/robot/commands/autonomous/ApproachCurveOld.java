@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
  * of approach) and when it is aligned up (by the aspect ratio being 2.3 or above),
  * it approach the rest of the distance with it in front.
  */
-public class ApproachCurve extends Command {
+public class ApproachCurveOld extends Command {
 
 	/** PID used for approaching the wall. */
 	private SynchronousPIDF PIDapproach;
@@ -35,7 +35,7 @@ public class ApproachCurve extends Command {
 	 * (use {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_LEFT} or 
 	 * {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_RIGHT}).
 	 */
-    public ApproachCurve(int pipeline) {
+    public ApproachCurveOld(int pipeline) {
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
 
@@ -64,7 +64,7 @@ public class ApproachCurve extends Command {
 		//PIDapproach.setOutputRange(-1, 1);
 		PIDapproach.setSetpoint(Constants.AutoDrive.SETPOINT_APPROACH); // Robot should aim to be be 50 in away from the target
 
-		//PIDcenter.setOutputRange(-1, 1);	
+		//PIDcenter.setOutputRange(-1, 1);
 		PIDcenter.setSetpoint(Constants.AutoDrive.SETPOINT_CENTER); // Robot should aim to keep the target centered on the crosshair
 
 		Robot.camera.setPipeline(pipeline);
@@ -75,22 +75,14 @@ public class ApproachCurve extends Command {
 	
 	@Override
 	protected void execute() {
-		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETLEFT);
-		double left_x = Robot.camera.getObjectX();
-		double left_height = Robot.camera.getTargetHeight();
-
-		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETRIGHT);
-
-		double right_x = Robot.camera.getObjectX();
-		double right_height = Robot.camera.getTargetHeight();
-
-		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER);
-		double overall_height = Robot.camera.getTargetHeight();
-		double overall_x = Robot.camera.getObjectX();
+		if (Robot.camera.getObjectAspectRatio() >= 2.6) { // when the object is aligned
+			Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER); // it should go straight on
+			aligned = true;
+		}
 
 		if (Robot.camera.canSeeObject()) {
 			valueapproach = PIDapproach.calculate(Robot.camera.getTargetDistance(),timer.get());
-			valuecenter = PIDcenter.calculate(overall_x, timer.get());
+			valuecenter = PIDcenter.calculate(Robot.camera.getObjectX(), timer.get());
 			//System.out.println(value);
 			//System.out.println(Robot.camera.getTargetDistance());
 		} else {

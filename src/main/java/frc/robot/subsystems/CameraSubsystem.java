@@ -38,6 +38,10 @@ public class CameraSubsystem extends Subsystem {
 	public static final int PIPELINE_LEFT = 1;
 	/** Pipeline id for the crosshair on the right. */
 	public static final int PIPELINE_RIGHT = 2;
+	/** Pipeline id for a single target on the left. */
+	public static final int PIPELINE_TARGETLEFT = 3;
+	/** Pipeline id for a single target on the right. */
+	public static final int PIPELINE_TARGETRIGHT = 4;
 
 
     public CameraSubsystem() {
@@ -160,6 +164,14 @@ public class CameraSubsystem extends Subsystem {
 		double range = Constants.Camera.TARGET_HEIGHT / Math.tan(angle);
 
 		return range;
+	}
+
+	/**
+	 * Gives the height of the target seen by the camera
+	 * @return Height of object in pixels
+	 */
+	public double getTargetHeight() {
+		return visionTable.getEntry(TARGET_HEIGHT).getDouble(0);
 	}
 
 	/** Changes the pipeline the Limelight is using to a new specified pipeline.
