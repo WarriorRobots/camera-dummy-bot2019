@@ -30,6 +30,16 @@ public class ApproachCurve extends Command {
 	/** Calculated PID output from {@link #PIDcenter} should stored in value. */
 	private double valuecenter;
 
+	private double left_x;
+	private double left_height;
+	private double right_x;
+	private double right_height;
+	private double overall_x;
+	private double overall_height;
+
+	/** iterates through 0 to 2 */
+	private int iteration;
+
 	/**
 	 * @param pipeline Pipeline to show direction to turn and align in
 	 * (use {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_LEFT} or 
@@ -70,33 +80,47 @@ public class ApproachCurve extends Command {
 		Robot.camera.setPipeline(pipeline);
 
 		timer.start();
+
+		iteration = 0;
+
+		overall_x = Robot.camera.getObjectX();
+		overall_height = Robot.camera.getTargetHeight();
 		
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETLEFT);
-		double left_x = Robot.camera.getObjectX();
-		double left_height = Robot.camera.getTargetHeight();
+		iteration++; iteration%=3; // iterate to the next number and roll over to 0 on 3
 
-		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETRIGHT);
-
-		double right_x = Robot.camera.getObjectX();
-		double right_height = Robot.camera.getTargetHeight();
+		switch (iteration) {
+		
+			case 1:	
+				Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETLEFT);
+				left_x = Robot.camera.getObjectX();
+				left_height = Robot.camera.getTargetHeight();
+				break;
+			case 2:
+				Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETRIGHT);
+				right_x = Robot.camera.getObjectX();
+				right_height = Robot.camera.getTargetHeight();
+				break;
+			case 3:
+				Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER);
+				overall_height = Robot.camera.getTargetHeight();
+				overall_x = Robot.camera.getObjectX();
+				break;
+		}
 
 		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER);
-		double overall_height = Robot.camera.getTargetHeight();
-		double overall_x = Robot.camera.getObjectX();
 
 		if (Robot.camera.canSeeObject()) {
 			valueapproach = PIDapproach.calculate(Robot.camera.getTargetDistance(),timer.get());
 			valuecenter = PIDcenter.calculate(overall_x, timer.get());
-			//System.out.println(value);
-			//System.out.println(Robot.camera.getTargetDistance());
+			
+			// helps to keep the robot to drive in a missile approach curve
 		} else {
 			// Set value to zero if the target can not be seen so robot does not go crazy
 			valueapproach = 0; 
-			
 			// Don't 0 valuecenter because it should "remember" what direction it's attempting to turn.
 		}
 
