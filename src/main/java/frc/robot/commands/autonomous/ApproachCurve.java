@@ -3,8 +3,10 @@ package frc.robot.commands.autonomous;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Constants.Camera;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.util.SynchronousPIDF;
+
 import edu.wpi.first.wpilibj.Timer;
 
 
@@ -29,16 +31,36 @@ public class ApproachCurve extends Command {
 	private double valueapproach;
 	/** Calculated PID output from {@link #PIDcenter} should stored in value. */
 	private double valuecenter;
+	
+	/** Height of the left target, overall target, and right target
+	 * (in that order as left as 0, and right as 2)
+	 */
+	private double[] target_height;
 
-	private double left_x;
-	private double left_height;
-	private double right_x;
-	private double right_height;
-	private double overall_x;
-	private double overall_height;
+	/** Horizontal postion of the left target, overall target, and right target
+	 * (in that order as left as 0, and right as 2)
+	*/
+	private double[] target_x;
 
-	/** iterates through 0 to 2 */
-	private int iteration;
+	private double target_distance;
+
+	/** Used for {@link #target_height} and {@link #target_x} */
+	private final int LEFT = 0;
+	/** Used for {@link #target_height} and {@link #target_x} */
+	private final int OVERALL = 1;
+	/** Used for {@link #target_height} and {@link #target_x} */
+	private final int RIGHT = 2;
+
+	/** Shorthand for pipeline */
+	private final int PIPELEFT = CameraSubsystem.PIPELINE_TARGETLEFT;
+	/** Shorthand for pipeline */
+	private final int PIPEOVERALL = CameraSubsystem.PIPELINE_CENTER;
+	/** Shorthand for pipeline */
+	private final int PIPERIGHT = CameraSubsystem.PIPELINE_TARGETRIGHT;
+
+	/** Keeps the id of the pipeline that is currently being asked to give values to the data arrays */
+	private int intendedPipe;
+
 
 	/**
 	 * @param pipeline Pipeline to show direction to turn and align in
@@ -81,41 +103,29 @@ public class ApproachCurve extends Command {
 
 		timer.start();
 
-		iteration = 0;
-
-		overall_x = Robot.camera.getObjectX();
-		overall_height = Robot.camera.getTargetHeight();
+		intendedPipe = 0;
+		target_height= new double[3];
+		target_x = new double[3];
+		target_distance = 0;
 		
 	}
 	
 	@Override
 	protected void execute() {
-		iteration++; iteration%=3; // iterate to the next number and roll over to 0 on 3
 
-		switch (iteration) {
-		
-			case 1:	
-				Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETLEFT);
-				left_x = Robot.camera.getObjectX();
-				left_height = Robot.camera.getTargetHeight();
-				break;
-			case 2:
-				Robot.camera.setPipeline(CameraSubsystem.PIPELINE_TARGETRIGHT);
-				right_x = Robot.camera.getObjectX();
-				right_height = Robot.camera.getTargetHeight();
-				break;
-			case 3:
-				Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER);
-				overall_height = Robot.camera.getTargetHeight();
-				overall_x = Robot.camera.getObjectX();
-				break;
-		}
+		updateTargetData();
 
-		Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER);
+		if (
+			target_height[LEFT] == 0 || target_height[OVERALL] == 0 || target_height[RIGHT] == 0 ||
+			target_x[LEFT] == 0 || target_x[OVERALL] == 0 || target_x[RIGHT] == 0 ||
+			target_distance == 0
+			)
+		return; // if any part of the data is unwritten to, then return out of function to avoid the
+		// the robot driving before it has data
 
 		if (Robot.camera.canSeeObject()) {
-			valueapproach = PIDapproach.calculate(Robot.camera.getTargetDistance(),timer.get());
-			valuecenter = PIDcenter.calculate(overall_x, timer.get());
+			valueapproach = PIDapproach.calculate(target_distance, timer.get());
+			valuecenter = PIDcenter.calculate(target_x[OVERALL], timer.get());
 			
 			// helps to keep the robot to drive in a missile approach curve
 		} else {
@@ -125,6 +135,37 @@ public class ApproachCurve extends Command {
 		}
 
 		Robot.drivetrain.arcadeDriveRaw(valueapproach, -valuecenter);
+	}
+
+	private void updateTargetData() {
+
+		if (Robot.camera.getPipeline() == intendedPipe) { // wait for pipeline to be the intened one
+			switch (intendedPipe) {
+		
+				case PIPELEFT: // Left
+					target_height[LEFT] = Robot.camera.getTargetHeight();
+					target_x[LEFT] = Robot.camera.getObjectX();
+					Robot.camera.setPipeline(PIPEOVERALL);
+					intendedPipe = PIPEOVERALL;
+					break;
+				case PIPEOVERALL: // Overall
+					target_height[OVERALL] = Robot.camera.getTargetHeight();
+					target_x[OVERALL] = Robot.camera.getObjectX();
+					target_distance = Robot.camera.getTargetDistance();
+					Robot.camera.setPipeline(PIPERIGHT);
+					intendedPipe = PIPERIGHT;
+					break;
+				case PIPERIGHT: // Right
+					target_height[RIGHT] = Robot.camera.getTargetHeight();
+					target_x[RIGHT] = Robot.camera.getObjectX();
+					Robot.camera.setPipeline(PIPELEFT);
+					intendedPipe = PIPELEFT;
+					break;
+				default:
+					break;
+			}
+		}
+
 	}
 	
     @Override

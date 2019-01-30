@@ -190,6 +190,13 @@ public class CameraSubsystem extends Subsystem {
 
 	}
 
+	/** Grabs the pipeline the Limelight is using currently */
+	public int getPipeline() {
+
+		return (int) visionTable.getEntry("getpipe").getDouble(-1.0);
+
+	}
+
 
 
     @Override
