@@ -48,6 +48,15 @@ public final class Constants {
 	 */
 	public static final class Camera {
 
+		/** Angle the camera is tilted downards in radians, 40 degrees */
+		public static final double CAMERA_TILT = -15.22 *Math.PI/180;
+		/** Height the lens is off of the ground in inches*/
+		public static final double ELEVATION = 13.5;
+
+		// this applies to most but not all targets
+		/** Height between the bottom of the target and the ground in inches */
+		public static final double TARGET_ELEVATION = 25;
+
 		/** Values applicable only to Ll2 */
 		public static final class Limelight2 {
 
