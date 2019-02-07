@@ -99,11 +99,11 @@ public class ApproachCurve extends Command {
 		//PIDcenter.setOutputRange(-1, 1);	
 		PIDcenter.setSetpoint(Constants.AutoDrive.SETPOINT_CENTER); // Robot should aim to keep the target centered on the crosshair
 
-		Robot.camera.setPipeline(pipeline);
-
 		timer.start();
 
-		intendedPipe = 0;
+		intendedPipe = PIPELEFT;
+		Robot.camera.setPipeline(intendedPipe);
+
 		target_height= new double[3];
 		target_x = new double[3];
 		target_distance = 0;
