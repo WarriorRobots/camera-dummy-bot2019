@@ -179,7 +179,7 @@ public class CameraSubsystem extends Subsystem {
 		double target_offset = visionTable.getEntry(TARGET_Y).getDouble(0) / Constants.Camera.Limelight2.PPR_H;
 
 		// Height difference between the camera and the target center
-		double height_difference = Math.abs(Constants.Camera.ELEVATION - Constants.Camera.TARGET_ELEVATION - Constants.Camera.TARGET_HEIGHT/2);
+		double height_difference = Constants.Camera.ELEVATION - Constants.Camera.TARGET_ELEVATION - Constants.Camera.TARGET_HEIGHT/2;
 
 		// Angle from the elevator to the center of the target
 		double angle = Math.PI/2 - Constants.Camera.CAMERA_TILT + target_offset;
