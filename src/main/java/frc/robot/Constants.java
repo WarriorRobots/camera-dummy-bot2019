@@ -49,9 +49,9 @@ public final class Constants {
 	public static final class Camera {
 
 		/** Angle the camera is tilted downards in radians, 40 degrees */
-		public static final double CAMERA_TILT = -15.22 *Math.PI/180;
+		public static final double CAMERA_TILT = -30 *Math.PI/180;
 		/** Height the lens is off of the ground in inches*/
-		public static final double ELEVATION = 13.5;
+		public static final double ELEVATION = 14;
 
 		// this applies to most but not all targets
 		/** Height between the bottom of the target and the ground in inches */
