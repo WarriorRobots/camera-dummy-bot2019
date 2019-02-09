@@ -184,8 +184,8 @@ public class CameraSubsystem extends Subsystem {
 		// Angle from the elevator to the center of the target
 		double angle = Math.PI/2 - Constants.Camera.CAMERA_TILT + target_offset;
 
-		System.out.println("Angle:");
-		System.out.println(angle);
+		//System.out.println("Angle:");
+		//System.out.println(angle);
 
 		// if the math is acting weird, return a working value
 		if (height_difference == 0 || angle == 0) return getTargetDistanceAdjacent();
