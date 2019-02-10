@@ -24,7 +24,7 @@ public final class Constants {
 		/** */
 		public static final double KD_APPROACH = 0;
 		/** SetPoint value for {@link ApproachWall#PIDapproach} */
-		public static final double SETPOINT_APPROACH = 35;
+		public static final double SETPOINT_APPROACH = 40;
 		/** Tolerance value for {@link ApproachWall#PIDapproach} */
 		public static final double TOLERANCE_APPROACH = 2;
 
@@ -49,7 +49,7 @@ public final class Constants {
 	public static final class Camera {
 
 		/** Angle the camera is tilted downards in radians, 40 degrees */
-		public static final double CAMERA_TILT = 40 *Math.PI/180;
+		public static final double CAMERA_TILT = 9 *Math.PI/180;
 		/** Height the lens is off of the ground in inches*/
 		public static final double ELEVATION = 47;
 
