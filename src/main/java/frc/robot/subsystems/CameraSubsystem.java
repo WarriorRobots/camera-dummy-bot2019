@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.robot.Constants;
+import frc.robot.Constants.Camera;
 
 /**
  * CameraSubsystem is supposed to recive data from the limelight to be output or processed.
@@ -145,12 +146,14 @@ public class CameraSubsystem extends Subsystem {
 
 
 	/**
+	 * (Adjacent because the range is the adjacent side.)
 	 * Uses the conversion from pixels to radians and uses radians to figures out the trigonometry
 	 * between the height of the target and the range.
 	 * (Target may not be visible at very close range, use a sonar.)
 	 * @return Distance from target in inches.
 	 */
-	public double getTargetDistance() {
+	@Deprecated
+	public double getTargetDistanceAdjacent() {
 
 		if (!canSeeObject()) return -1;
 
@@ -164,6 +167,38 @@ public class CameraSubsystem extends Subsystem {
 		double range = Constants.Camera.TARGET_HEIGHT / Math.tan(angle);
 
 		return range;
+	}
+	
+	/**
+	 * Uses the conversion from pixels to radians and uses radians to figures out the trigonometry
+	 * between the height of the target and the range.
+	 * (Target may not be visible at very close range, use a sonar.)
+	 * @return Distance from target in inches.
+	 */
+	public double getTargetDistance() {
+
+		if (!canSeeObject()) return -1;
+
+		// offset angle upwards in radians
+		double target_offset = visionTable.getEntry(TARGET_Y).getDouble(0) * Math.PI/180;
+
+		// Height difference between the camera and the target center
+		double height_difference = Constants.Camera.ELEVATION - Constants.Camera.TARGET_ELEVATION - Constants.Camera.TARGET_HEIGHT/2;
+
+		// Angle from the elevator to the center of the target
+		double angle = Math.PI/2 - Constants.Camera.CAMERA_TILT + target_offset;
+
+		//System.out.println("Angle:");
+		//System.out.println(angle);
+
+		// if the math is acting weird, return a working value
+		if (height_difference == 0 || angle == 0) return getTargetDistanceAdjacent();
+
+		// range = opp = adj*tan(Theta)
+		double range = height_difference * Math.tan(angle);
+
+		return range;
+
 	}
 
 	/**
