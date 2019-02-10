@@ -24,7 +24,7 @@ public final class Constants {
 		/** */
 		public static final double KD_APPROACH = 0;
 		/** SetPoint value for {@link ApproachWall#PIDapproach} */
-		public static final double SETPOINT_APPROACH = 40;
+		public static final double SETPOINT_APPROACH = 41;
 		/** Tolerance value for {@link ApproachWall#PIDapproach} */
 		public static final double TOLERANCE_APPROACH = 2;
 

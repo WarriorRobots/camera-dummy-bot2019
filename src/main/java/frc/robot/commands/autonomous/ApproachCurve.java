@@ -61,6 +61,9 @@ public class ApproachCurve extends Command {
 	/** Keeps the id of the pipeline that is currently being asked to give values to the data arrays */
 	private int intendedPipe;
 
+	/** Left:Right height ratio of targets */
+	private double heightRatio;
+
 
 	/**
 	 * @param pipeline Pipeline to show direction to turn and align in
@@ -124,6 +127,8 @@ public class ApproachCurve extends Command {
 		// the robot driving before it has data
 
 		if (Robot.camera.canSeeObject()) {
+			shiftCenter();
+
 			valueapproach = PIDapproach.calculate(target_distance, timer.get());
 			valuecenter = PIDcenter.calculate(target_x[OVERALL], timer.get());
 			
@@ -132,6 +137,7 @@ public class ApproachCurve extends Command {
 			// Set value to zero if the target can not be seen so robot does not go crazy
 			valueapproach = 0; 
 			// Don't 0 valuecenter because it should "remember" what direction it's attempting to turn.
+			valuecenter = 0;
 		}
 
 		Robot.drivetrain.arcadeDriveRaw(valueapproach, -valuecenter);
@@ -166,6 +172,45 @@ public class ApproachCurve extends Command {
 			}
 		}
 
+		try { // try statement makes the robot doesn't crash when target_height isn't set
+			heightRatio = target_height[LEFT]/target_height[RIGHT];
+		} catch(Exception e) {
+			heightRatio = 0;
+		}
+
+	}
+
+	/**
+	 * Shift the setpoint of the {@link #PIDcenter}
+	 * with the intent of making the robot turn to compensate the angle the robot is facing the target at.
+	 * This should make the turn be an arc to make the robot perpendicular to the target.
+	 */ 
+	private void shiftCenter(){
+		// don't move the setpoint if there is an issue
+		if (heightRatio==0) return;
+
+		// bound the height ratio within 2 to 0.5
+		// this is so the turn is not to large
+		if (heightRatio>2) heightRatio=2;
+		if (heightRatio<0.5) heightRatio=0.5;
+
+		// turn the ratio into a screenspace
+		// by reversing a function that looks similar to the output from the ratio
+		// (the function is the exponential R(x)=2^(-x) )
+		// (so when x is -1 (full left), the ratio is 2)
+		// (so when x is 1 (full right), the ratio is 0.5)
+		
+		// solving for x we get -log_2(R(x)) = x
+		// there is no log base in java so we must use the property log_b(a) = log(a)/log(b)
+		double x = -Math.log(heightRatio) / Math.log(2);
+
+		// if the x is within tolerable range, ignore it
+		if (Math.abs(x)<0.1) x=0;
+
+		// now with x being between -1 and 1 we can multiply by the degrees we want the camera to turn
+		// at most (25 degrees)
+		double point = x * 25;
+		PIDcenter.setSetpoint(point);
 	}
 	
     @Override
