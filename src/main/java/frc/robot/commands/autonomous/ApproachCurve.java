@@ -158,8 +158,14 @@ public class ApproachCurve extends Command {
 					target_height[OVERALL] = Robot.camera.getTargetHeight();
 					target_x[OVERALL] = Robot.camera.getObjectX();
 					target_distance = Robot.camera.getTargetDistance();
-					Robot.camera.setPipeline(PIPERIGHT);
-					intendedPipe = PIPERIGHT;
+					// don't move off the center pipeline if the targets become centered
+					if ( !(1/1.1 < heightRatio && heightRatio < 1.1/1) ) {
+						// set the targets to be the same height
+						// so it doesn't try to turn to fix it
+						heightRatio = 1;
+						Robot.camera.setPipeline(PIPERIGHT);
+						intendedPipe = PIPERIGHT;
+					}
 					break;
 				case PIPERIGHT: // Right
 					target_height[RIGHT] = Robot.camera.getTargetHeight();
