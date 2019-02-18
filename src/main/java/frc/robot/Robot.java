@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.LineFollowerSubsystem;
 
 import frc.robot.commands.autonomous.*;
 
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
 
   public static final CameraSubsystem camera = new CameraSubsystem();
   public static final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  public static final LineFollowerSubsystem linefollow = new  LineFollowerSubsystem();
 
   public static ControlHandler controlHandler;
 

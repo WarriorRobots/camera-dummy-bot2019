@@ -57,6 +57,7 @@ public class ApproachWall extends Command {
 	
 	@Override
 	protected void execute() {
+	
 		if (Robot.camera.canSeeObject()) {
 			valueapproach = PIDapproach.calculate(Robot.camera.getTargetDistance(),timer.get());
 			valuecenter = PIDcenter.calculate(Robot.camera.getObjectX(), timer.get());
@@ -70,6 +71,7 @@ public class ApproachWall extends Command {
 		}
 
 		Robot.drivetrain.arcadeDriveRaw(valueapproach, -valuecenter);
+
 	}
 	
     @Override

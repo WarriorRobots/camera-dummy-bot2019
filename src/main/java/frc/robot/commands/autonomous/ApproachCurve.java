@@ -115,6 +115,7 @@ public class ApproachCurve extends Command {
 	
 	@Override
 	protected void execute() {
+		
 
 		updateTargetData();
 

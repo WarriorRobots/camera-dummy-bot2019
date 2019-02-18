@@ -75,6 +75,7 @@ public class ApproachCurveOld extends Command {
 	
 	@Override
 	protected void execute() {
+		
 		if (Robot.camera.getObjectAspectRatio() >= 2.6) { // when the object is aligned
 			Robot.camera.setPipeline(CameraSubsystem.PIPELINE_CENTER); // it should go straight on
 			aligned = true;
