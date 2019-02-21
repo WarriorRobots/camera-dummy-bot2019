@@ -57,8 +57,12 @@ public class LineFollowerSubsystem extends Subsystem {
      * Returns true if left and right followers don't see line, and middle follower
      * does; false otherwise;
      */
-    public boolean onLine() {
+    public boolean onCenter() {
         return (!getLeftLineFollower() && !getRightLineFollower()) && getMiddleLineFollower();
+    }
+
+    public boolean onLine(){
+        return (getLeftLineFollower() || getRightLineFollower() || getMiddleLineFollower());
     }
 
     /**

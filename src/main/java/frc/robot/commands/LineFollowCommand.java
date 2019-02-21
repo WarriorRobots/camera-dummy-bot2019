@@ -10,10 +10,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LineFollowCommand extends Command {
   char last_turn = 'm';
+  NetworkTableEntry on_line;
+
   public LineFollowCommand() {
     requires(Robot.linefollow);
     requires(Robot.drivetrain);
@@ -22,13 +26,21 @@ public class LineFollowCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("line-follow");
+    on_line = inst.getEntry("on-line");
   }
-
+  /**
+   * STEPS:
+   * 1. Make sure that program only searches for line, does not start following until Approach sends "stop"
+   * 2. Send value to Network table value of 'on-line' when infrared goes off
+   * 3. In Approach Curve, go until on-line says TRUE and once stopped, make sure you tell line follow it's okay to start
+   */
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     double turn_speed;
-    if(Robot.linefollow.onLine()){
+    if(Robot.linefollow.onCenter()){
       turn_speed = 0;
       last_turn = 'm';
     }else if(Robot.linefollow.onLeftOfLine()){

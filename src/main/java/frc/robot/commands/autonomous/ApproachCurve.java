@@ -1,13 +1,16 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.util.SynchronousPIDF;
+import edu.wpi.first.wpilibj.Timer;
+
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.Constants.Camera;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.util.SynchronousPIDF;
 
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.LineFollowerSubsystem;;
+
+
 
 
 /** ApproachCurve approachs the target keeping it to the left or right (depending on the direction
@@ -70,9 +73,10 @@ public class ApproachCurve extends Command {
 	 * (use {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_LEFT} or 
 	 * {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_RIGHT}).
 	 */
-    public ApproachCurve(int pipeline) {
+    public ApproachCurve(int pipeline) {//TODO: ignore int pipeline
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
+		requires(Robot.linefollow);
 
 		this.pipeline = pipeline;
 		valueapproach = 0;
@@ -222,7 +226,7 @@ public class ApproachCurve extends Command {
 	
     @Override
 	protected boolean isFinished() {
-		return false;
+		return Robot.linefollow.onLine();
 		/*
 		return (Robot.camera.getTargetDistance() < Constants.AutoDrive.SETPOINT_APPROACH &&
 			PIDapproach.onTarget(Constants.AutoDrive.TOLERANCE_APPROACH));

@@ -8,18 +8,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.autonomous.ApproachCurve;
+import frc.robot.commands.LineFollowCommand;
 
 public class AproachAndLineFollow extends CommandGroup {
+  ApproachCurve approachCurve = new ApproachCurve(0);
+  LineFollowCommand lineFollow = new LineFollowCommand();
   /**
    * Combines the ApproachCurve command and LineFollowCommand.
    * Approach Curve is to get into the general area and Line Follow is to refine for perpendicularity.
    */
   public AproachAndLineFollow() {
+    addSequential(approachCurve);
+    addSequential(lineFollow);
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
     // these will run in order.
-    addSequential(new );
+    // addSequential();
     // To run multiple commands at the same time,
     // use addParallel()
     // e.g. addParallel(new Command1());
