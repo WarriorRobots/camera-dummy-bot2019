@@ -12,7 +12,7 @@ import frc.robot.commands.autonomous.ApproachCurve;
 import frc.robot.commands.LineFollowCommand;
 
 public class AproachAndLineFollow extends CommandGroup {
-  ApproachCurve approachCurve = new ApproachCurve(0);
+  ApproachCurve approachCurve = new ApproachCurve();
   LineFollowCommand lineFollow = new LineFollowCommand();
   /**
    * Combines the ApproachCurve command and LineFollowCommand.

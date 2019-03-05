@@ -78,8 +78,7 @@ public final class ControlHandler {
 		rightXboxBumper.whenPressed(new ChangePipeline(CameraSubsystem.PIPELINE_RIGHT));
 
 		//xboxX.whileHeld(new ApproachCurve());
-		xboxLeft.whileHeld(new ApproachCurve(CameraSubsystem.PIPELINE_LEFT));
-		xboxRight.whileHeld(new ApproachCurve(CameraSubsystem.PIPELINE_RIGHT));
+		rightXboxTrigger.whileHeld(new ApproachCurve());
         xboxA.whileHeld(new ApproachWall());
 		//rightXboxBumper.whenPressed(new SolenoidOut(4));
 		//rightXboxTrigger.whenPressed(new SolenoidIn(4));

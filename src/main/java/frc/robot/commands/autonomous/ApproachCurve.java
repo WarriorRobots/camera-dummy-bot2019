@@ -67,18 +67,11 @@ public class ApproachCurve extends Command {
 	/** Left:Right height ratio of targets */
 	private double heightRatio;
 
-
-	/**
-	 * @param pipeline Pipeline to show direction to turn and align in
-	 * (use {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_LEFT} or 
-	 * {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_RIGHT}).
-	 */
-    public ApproachCurve(int pipeline) {//TODO: ignore int pipeline
+    public ApproachCurve() {//TODO: ignore int pipeline
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
 		requires(Robot.linefollow);
 
-		this.pipeline = pipeline;
 		valueapproach = 0;
 		valuecenter = 0;
 		aligned = false;
