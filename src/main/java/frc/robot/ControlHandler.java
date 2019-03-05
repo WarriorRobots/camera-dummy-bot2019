@@ -17,6 +17,7 @@ import frc.robot.commands.autonomous.ApproachCurve;
 //import frc.robot.commands.SolenoidIn;
 //import frc.robot.commands.SolenoidOut;
 import frc.robot.commands.autonomous.ApproachWall;
+import frc.robot.commands.autonomous.CameraNFollower;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.ChangePipeline;
 
@@ -79,6 +80,7 @@ public final class ControlHandler {
 
 		//xboxX.whileHeld(new ApproachCurve());
 		rightXboxTrigger.whileHeld(new ApproachCurve());
+		leftXboxTrigger.whileHeld(new CameraNFollower());
         xboxA.whileHeld(new ApproachWall());
 		//rightXboxBumper.whenPressed(new SolenoidOut(4));
 		//rightXboxTrigger.whenPressed(new SolenoidIn(4));

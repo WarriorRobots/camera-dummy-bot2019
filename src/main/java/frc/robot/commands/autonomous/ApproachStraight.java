@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
  * of approach) and when it is aligned up (by the aspect ratio being 2.3 or above),
  * it approach the rest of the distance with it in front.
  */
-public class ApproachCurveOld extends Command {
+public class ApproachStraight extends Command {
 
 	/** PID used for approaching the wall. */
 	private SynchronousPIDF PIDapproach;
@@ -35,7 +35,7 @@ public class ApproachCurveOld extends Command {
 	 * (use {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_LEFT} or 
 	 * {@link frc.robot.subsystems.CameraSubsystem#PIPELINE_RIGHT}).
 	 */
-    public ApproachCurveOld(int pipeline) {
+    public ApproachStraight(int pipeline) {
 		requires(Robot.drivetrain);
 		requires(Robot.camera);
 
