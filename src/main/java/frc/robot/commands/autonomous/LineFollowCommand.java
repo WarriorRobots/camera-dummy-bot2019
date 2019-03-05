@@ -51,8 +51,8 @@ public class LineFollowCommand extends Command {
       last_turn = 'l';
     }else{
       turn_speed = (last_turn == 'r')? -0.12:0.12;
-      /** Esto es para correctar cuando el robot moven lejos de la linea */
-      /** Vamos a mover en la opuesta direccion del "last_turn" */
+      /** This is to correct when the robot moves away from the line */
+      /** We are going to move in the opposite direction of the "last_turn" */
     }
     Robot.drivetrain.arcadeDriveRaw(0.25, turn_speed);
   }
