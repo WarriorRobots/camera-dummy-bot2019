@@ -10,13 +10,16 @@ package frc.robot.commands.autonomous;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-
 public class LineFollowCommand extends Command {
-  char last_turn = 'm';
-  NetworkTableEntry on_line;
+
+  /** Value of how much to turn right on the left of the line */
+  private static final double turn_constant = 0.12;
+
+  private final static int LEFT = 0;
+  private final static int MIDDLE = 1;
+  private final static int RIGHT = 2;
+
+  private int last_turn = MIDDLE;
 
   public LineFollowCommand() {
     requires(Robot.linefollow);
@@ -26,9 +29,6 @@ public class LineFollowCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("line-follow");
-    on_line = inst.getEntry("on-line");
   }
   /**
    * STEPS:
@@ -42,15 +42,15 @@ public class LineFollowCommand extends Command {
     double turn_speed;
     if(Robot.linefollow.onCenter()){
       turn_speed = 0;
-      last_turn = 'm';
+      last_turn = MIDDLE;
     }else if(Robot.linefollow.onLeftOfLine()){
-      turn_speed = 0.12;
-      last_turn = 'r';
+      turn_speed = turn_constant;
+      last_turn = RIGHT;
     }else if(Robot.linefollow.onRightOfLine()){
-      turn_speed = -0.12;
-      last_turn = 'l';
+      turn_speed = -turn_constant;
+      last_turn = LEFT;
     }else{
-      turn_speed = (last_turn == 'r')? -0.12:0.12;
+      turn_speed = (last_turn == RIGHT)? -turn_constant:turn_constant;
       /** This is to correct when the robot moves away from the line */
       /** We are going to move in the opposite direction of the "last_turn" */
     }
